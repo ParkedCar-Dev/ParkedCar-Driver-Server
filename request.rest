@@ -43,24 +43,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxN
 
 
 ###
-POST http://localhost:8001/space/add
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjkwNjU2MjY5LCJleHAiOjE2OTA2NTk4Njl9.GUEgUg7f9AsoO6eRvLSPukDcfrSaM3oZIYB1f1DxrZo
+GET http://localhost:8001/search/quick
 Content-Type: application/json
 
 {
-    "width": 10,
-    "length": 10,
-    "height": 10,
-    "base_fare": 100,
-    "security_measures": "securityMeasures",
-    "status": "status",
-    "rating": 4,
-    "total_books": 10,
-    "auto_approve": true,
-    "address": "address",
-    "city": "city",
-    "latitude": 10,
-    "longitude": 10,
-    "availability_mask": "availabilityMask",
-    "time_slots": [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]
+    "latitude": 10.0001,
+    "longitude": 9.9999,
+    "city": "city"
 }
