@@ -1,0 +1,66 @@
+GET http://localhost:8001
+
+
+###
+POST http://localhost:8001/register
+Content-Type: application/json
+
+{
+    "name": "user2",
+    "email": "user2@test.com",
+    "phone": "1234567890",
+    "password": "123456"
+}
+
+###
+POST http://localhost:8001/auth/login
+Content-Type: application/json
+
+{
+    "email": "user2@test.com",
+    "password": "123456"
+}
+
+###
+POST http://localhost:8001/auth/refresh
+Content-Type: application/json
+
+{
+    "refreshToken": "3d8466051a1b3e8d080c76b4c356b8dd2df17d243703c5205ae79d65c3e7892beb14f11f316c21437b2ebe7412e3f519892162e8d29105f9fd4778e1923b9331"
+}
+
+###
+POST http://localhost:8001/auth/logout
+Content-Type: application/json
+
+{
+    "refreshToken": "3d8466051a1b3e8d080c76b4c356b8dd2df17d243703c5205ae79d65c3e7892beb14f11f316c21437b2ebe7412e3f519892162e8d29105f9fd4778e1923b9331"
+}
+
+###
+GET http://localhost:8001/protected 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjkwODEyMzQ1LCJleHAiOjE2OTA4MTU5NDV9.GaxlU7rRxjOfg7nPUDulCMKi5jy6QTda4h_I56vie50
+
+
+###
+POST http://localhost:8001/space/add
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjkwNjU2MjY5LCJleHAiOjE2OTA2NTk4Njl9.GUEgUg7f9AsoO6eRvLSPukDcfrSaM3oZIYB1f1DxrZo
+Content-Type: application/json
+
+{
+    "width": 10,
+    "length": 10,
+    "height": 10,
+    "base_fare": 100,
+    "security_measures": "securityMeasures",
+    "status": "status",
+    "rating": 4,
+    "total_books": 10,
+    "auto_approve": true,
+    "address": "address",
+    "city": "city",
+    "latitude": 10,
+    "longitude": 10,
+    "availability_mask": "availabilityMask",
+    "time_slots": [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]
+}
