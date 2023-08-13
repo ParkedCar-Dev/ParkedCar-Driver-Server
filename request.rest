@@ -1,8 +1,11 @@
-GET http://localhost:8001
+@baseURL= http://localhost:8001
+
+###
+GET {{baseURL}}
 
 
 ###
-POST http://localhost:8001/register
+POST {{baseURL}}/register
 Content-Type: application/json
 
 {
@@ -12,38 +15,44 @@ Content-Type: application/json
     "password": "123456"
 }
 
-###
-POST http://localhost:8001/auth/login
+### 
+# @name  login
+
+POST {{baseURL}}/auth/login
 Content-Type: application/json
 
 {
     "email": "user2@test.com",
     "password": "123456"
 }
+###
+
+@access_token = {{login.response.body.token}}
+@refresh_token = {{login.response.body.refreshToken}}
 
 ###
-POST http://localhost:8001/auth/refresh
+POST {{baseURL}}/auth/refresh
 Content-Type: application/json
 
 {
-    "refreshToken": "3d8466051a1b3e8d080c76b4c356b8dd2df17d243703c5205ae79d65c3e7892beb14f11f316c21437b2ebe7412e3f519892162e8d29105f9fd4778e1923b9331"
+    "refreshToken": "{{refresh_token}}"
 }
 
 ###
-POST http://localhost:8001/auth/logout
+POST {{baseURL}}/auth/logout
 Content-Type: application/json
 
 {
-    "refreshToken": "3d8466051a1b3e8d080c76b4c356b8dd2df17d243703c5205ae79d65c3e7892beb14f11f316c21437b2ebe7412e3f519892162e8d29105f9fd4778e1923b9331"
+    "refreshToken": "{{refresh_token}}"
 }
 
 ###
-GET http://localhost:8001/protected 
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjkwODEyMzQ1LCJleHAiOjE2OTA4MTU5NDV9.GaxlU7rRxjOfg7nPUDulCMKi5jy6QTda4h_I56vie50
+GET {{baseURL}}/protected 
+Authorization: Bearer {{access_token}}
 
 
 ###
-GET http://localhost:8001/search/quick
+GET {{baseURL}}/search/quick
 Content-Type: application/json
 
 {
