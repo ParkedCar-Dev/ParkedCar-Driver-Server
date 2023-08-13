@@ -8,7 +8,7 @@ module.exports = class SearchController{
         try{
             const {latitude, longitude, city} = req.body;
             if (!latitude || !longitude || !city){
-                return res.json({status: "error", message: "Invalid form submission.", spaces: null, prices: null})
+                return res.json({status: "error", message: "Invalid form submission.", spaces: null})
             }
             var spaces = await db.space.findAll({
                 where: { city: city, status: "active" || "requested" }
@@ -31,11 +31,30 @@ module.exports = class SearchController{
                 return space.base_fare + additional_price;
             })
 
-            res.json({status: "success", message: "Quick search successful.", spaces: spaces, prices: prices})
+            var result = spaces.map((space, index) => {
+                return {
+                    id: space.space_id,
+                    address: space.address,
+                    latitude: space.latitude,
+                    longitude: space.longitude,
+                    distance: space.distance,
+                    price: prices[index],
+                    security_measures: space.security_measures,
+                    width: space.width,
+                    height: space.height,
+                    length: space.length,
+                    auto_approve: space.auto_approve,
+                    user_id: space.user_id,
+                    rating: space.rating,
+                    total_books: space.total_books,
+                }
+            })
+
+            res.json({status: "success", message: "Quick search successful.", spaces: result})
 
         }catch(err){
             console.error(err)
-            res.json({status: "error", message: "Something went wrong.", spaces: null, prices: null})
+            res.json({status: "error", message: "Something went wrong.", spaces: null})
         }
     }
 
