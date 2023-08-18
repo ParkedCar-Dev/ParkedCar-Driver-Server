@@ -22,7 +22,7 @@ module.exports = class SearchController{
             const from = Date.now();
             const to = from + 3600000;
 
-            //spaces = Utils.filterByTime(from, to, spaces);
+            spaces = Utils.filterByTime(from, to, spaces);
 
             const time_slot_prices = await db.time_slot_price.findAll({
                 attributes: ['additional_price'],

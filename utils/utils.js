@@ -19,20 +19,20 @@ module.exports = class Utils {
 
     static filterByDistance(latitude1, longitude1, spaces, distance) {
         return spaces.filter(space => {
-            distance = this.getDistance(latitude1, longitude1, space.latitude, space.longitude);
-            space["distance"] = distance;
-            return distance <= distance;
+            const _distance = this.getDistance(latitude1, longitude1, space.latitude, space.longitude);
+            space["distance"] = _distance;
+            return _distance <= distance;
         });
     }
 
     static filterByTime(from, to, spaces) {
-        const fromTime = new Date(from);
-        const toTime = new Date(to);
-        const fromDay = fromTime.getDay();
-        const toDay = toTime.getDay();
-        const fromHour = fromTime.getHours();
-        const toHour = toTime.getHours();
-        const toMinute = toTime.getMinutes();
+        var fromTime = new Date(from);
+        var toTime = new Date(to);
+        var fromDay = fromTime.getDay();
+        var toDay = toTime.getDay();
+        var fromHour = fromTime.getHours();
+        var toHour = toTime.getHours();
+        var toMinute = toTime.getMinutes();
         if (toMinute > 0) {
             toHour += 1;
         }
