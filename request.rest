@@ -1,5 +1,5 @@
 @baseURL= http://localhost:8001
-
+#@baseURL = https://parked-car-driver-dev-api.onrender.com
 ###
 GET {{baseURL}}
 
@@ -56,7 +56,7 @@ GET {{baseURL}}/search/quick
 Content-Type: application/json
 
 {
-    "latitude": 10.0001,
-    "longitude": 9.9999,
-    "city": "dhaka"
+    "latitude": 37.3688,
+    "longitude": -122.0279,
+    "city": "sunnyvale"
 }

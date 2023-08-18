@@ -11,7 +11,10 @@ module.exports = class SearchController{
                 return res.json({status: "error", message: "Invalid form submission.", spaces: null})
             }
             var spaces = await db.space.findAll({
-                where: { city: city, status: "active" || "requested" }
+                where: { city: {
+                    [db.Sequelize.Op.iLike]: city
+                }, status: "active" || "requested" 
+                }
             })
 
             spaces = Utils.filterByDistance(latitude, longitude, spaces, default_distance);
