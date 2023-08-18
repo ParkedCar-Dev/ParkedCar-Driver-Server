@@ -40,15 +40,19 @@ module.exports = class Utils {
         const t_index = toDay * 24 + toHour;
 
         return spaces.filter(space => {
-            var available = true;
-            for (var i = f_index; i <= t_index; i++) {
-                if (space.time_slots[i] === false) {
-                    available = false;
-                    break;
-                }
-            }
-            return available;
+            return this.checkAvailability(f_index, t_index, space);
         });
+    }
+
+    static checkAvailability(f_index, t_index, space) {
+        var available = true;
+        for (var i = f_index; i <= t_index; i++) {
+            if (space.time_slots[i] === false) {
+                available = false;
+                break;
+            }
+        }
+        return available;
     }
 
     static calculatePrice(from, to, time_slot_prices) {

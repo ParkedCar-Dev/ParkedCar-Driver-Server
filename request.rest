@@ -9,10 +9,10 @@ POST {{baseURL}}/register
 Content-Type: application/json
 
 {
-    "name": "user2",
-    "email": "user2@test.com",
+    "name": "driver2",
+    "email": "driver2",
     "phone": "1234567890",
-    "password": "123456"
+    "password": "1234"
 }
 
 ### 
@@ -22,29 +22,13 @@ POST {{baseURL}}/auth/login
 Content-Type: application/json
 
 {
-    "email": "user2@test.com",
-    "password": "123456"
+    "email": "driver2",
+    "password": "1234"
 }
 ###
 
 @access_token = {{login.response.body.token}}
 @refresh_token = {{login.response.body.refreshToken}}
-
-###
-POST {{baseURL}}/auth/refresh
-Content-Type: application/json
-
-{
-    "refreshToken": "{{refresh_token}}"
-}
-
-###
-POST {{baseURL}}/auth/logout
-Content-Type: application/json
-
-{
-    "refreshToken": "{{refresh_token}}"
-}
 
 ###
 GET {{baseURL}}/protected 
