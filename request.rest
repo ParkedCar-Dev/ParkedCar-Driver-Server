@@ -1,0 +1,62 @@
+@baseURL= http://localhost:8001
+#@baseURL = https://parked-car-driver-dev-api.onrender.com
+###
+GET {{baseURL}}
+
+
+###
+POST {{baseURL}}/register
+Content-Type: application/json
+
+{
+    "name": "user2",
+    "email": "user2@test.com",
+    "phone": "1234567890",
+    "password": "123456"
+}
+
+### 
+# @name  login
+
+POST {{baseURL}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "user2@test.com",
+    "password": "123456"
+}
+###
+
+@access_token = {{login.response.body.token}}
+@refresh_token = {{login.response.body.refreshToken}}
+
+###
+POST {{baseURL}}/auth/refresh
+Content-Type: application/json
+
+{
+    "refreshToken": "{{refresh_token}}"
+}
+
+###
+POST {{baseURL}}/auth/logout
+Content-Type: application/json
+
+{
+    "refreshToken": "{{refresh_token}}"
+}
+
+###
+GET {{baseURL}}/protected 
+Authorization: Bearer {{access_token}}
+
+
+###
+GET {{baseURL}}/search/quick
+Content-Type: application/json
+
+{
+    "latitude": 37.3688,
+    "longitude": -122.0279,
+    "city": "sunnyvale"
+}
