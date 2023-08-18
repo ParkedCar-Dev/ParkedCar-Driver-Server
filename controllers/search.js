@@ -1,5 +1,6 @@
 const Utils = require('../utils/utils');
 const Space = require('../models/space');
+const db = require('../models/index');
 
 module.exports = class SearchController{
     static async quickSearch(req, res){
