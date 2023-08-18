@@ -1,6 +1,5 @@
-const db = require('../models');
 const Utils = require('../utils/utils');
-
+const Space = require('../models/space');
 
 module.exports = class SearchController{
     static async quickSearch(req, res){
@@ -10,7 +9,7 @@ module.exports = class SearchController{
             if (!latitude || !longitude || !city){
                 return res.json({status: "error", message: "Invalid form submission.", spaces: null})
             }
-            var spaces = await db.space.findAll({
+            var spaces = await Space.findAll({
                 where: { city: {
                     [db.Sequelize.Op.iLike]: city
                 }, status: "active" || "requested" 
