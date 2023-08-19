@@ -7,7 +7,7 @@ module.exports = class SearchController{
     static async quickSearch(req, res){
         const default_distance = parseInt(process.env.DEFAULT_DISTANCE);
         try{
-            const {latitude, longitude, city} = req.body;
+            const [latitude, longitude, city] = [req.body.latitude, req.body.longitude, req.body.city];
             if (!latitude || !longitude || !city){
                 return res.json({status: "error", message: "Invalid form submission.", spaces: null})
             }

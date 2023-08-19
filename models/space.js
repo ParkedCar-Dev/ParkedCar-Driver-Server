@@ -52,6 +52,7 @@ module.exports = class Space extends Model{
                     FROM booking b
                     WHERE
                         b.space_id = s.space_id
+                        AND b.status = 'active'
                         AND b.from_time < :to_time
                         AND b.to_time > :from_time);`, 
         {
