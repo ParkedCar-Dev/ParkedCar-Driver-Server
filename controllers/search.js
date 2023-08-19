@@ -1,28 +1,29 @@
 const Utils = require('../utils/utils');
 const Space = require('../models/space');
+const Booking = require('../models/booking');
 const db = require('../models/index');
 
 module.exports = class SearchController{
     static async quickSearch(req, res){
-        const default_distance = process.env.DEFAULT_DISTANCE;
+        const default_distance = parseInt(process.env.DEFAULT_DISTANCE);
         try{
             const {latitude, longitude, city} = req.body;
             if (!latitude || !longitude || !city){
                 return res.json({status: "error", message: "Invalid form submission.", spaces: null})
             }
-            var spaces = await Space.findAll({
-                where: { city: {
-                    [db.Sequelize.Op.iLike]: city
-                }, status: "active" || "requested" 
-                }
-            })
+            // var spaces = await Space.findAll({
+            //     where: { city: {
+            //         [db.Sequelize.Op.iLike]: city
+            //     }, status: "active" || "requested" 
+            //     }
+            // })
 
-            spaces = Utils.filterByDistance(latitude, longitude, spaces, default_distance);
+            // spaces = Utils.filterByDistance(latitude, longitude, spaces, default_distance);
 
             const from = Date.now();
             const to = from + 3600000;
 
-            spaces = Utils.filterByTime(from, to, spaces);
+            const spaces = await Space.find_available_spaces(city, latitude, longitude, from, to, default_distance);
 
             const time_slot_prices = await db.time_slot_price.findAll({
                 attributes: ['additional_price'],

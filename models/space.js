@@ -31,5 +31,40 @@ module.exports = class Space extends Model{
         return model
     }
 
+    static async find_available_spaces(city, latitude, longitude, from, to, distance){
+        return await this.sequelize.query(
+            `Select s.*,
+            earth_distance(
+                ll_to_earth(:latitude, :longitude),
+                ll_to_earth(s.latitude, s.longitude)
+            ) as distance
+            FROM
+                space s
+            WHERE
+                lower(s.city) = lower(:city)
+                AND s.status = 'active'
+                AND earth_distance(
+                    ll_to_earth(:latitude, :longitude),
+                    ll_to_earth(s.latitude, s.longitude)
+                ) < :distance
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM booking b
+                    WHERE
+                        b.space_id = s.space_id
+                        AND b.from_time < :to_time
+                        AND b.to_time > :from_time);`, 
+        {
+            replacements: {
+                city: city,
+                latitude: latitude,
+                longitude: longitude,
+                from_time: from,
+                to_time: to,
+                distance: distance
+            },
+            type: this.sequelize.QueryTypes.SELECT
+        })
+    }
     
 }  
