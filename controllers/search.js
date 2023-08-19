@@ -11,15 +11,6 @@ module.exports = class SearchController{
             if (!latitude || !longitude || !city){
                 return res.json({status: "error", message: "Invalid form submission.", spaces: null})
             }
-            // var spaces = await Space.findAll({
-            //     where: { city: {
-            //         [db.Sequelize.Op.iLike]: city
-            //     }, status: "active" || "requested" 
-            //     }
-            // })
-
-            // spaces = Utils.filterByDistance(latitude, longitude, spaces, default_distance);
-
             const from = Date.now();
             const to = from + 3600000;
 

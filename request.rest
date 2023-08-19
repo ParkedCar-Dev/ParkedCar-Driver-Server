@@ -36,7 +36,7 @@ Authorization: Bearer {{access_token}}
 
 
 ###
-GET {{baseURL}}/search/quick
+POST {{baseURL}}/search/quick
 Content-Type: application/json
 
 {
