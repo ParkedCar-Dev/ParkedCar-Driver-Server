@@ -14,7 +14,7 @@
 //     medium_transaction_id varchar(255) not null
 // );
 
-const {Model} = require('sequelize')
+const {Model, Op} = require('sequelize')
 
 module.exports = class Booking extends Model{
     static init(sequelize, Sequelize){
@@ -32,13 +32,33 @@ module.exports = class Booking extends Model{
             payment_status: { type: Sequelize.STRING, allowNull: false },
             payment_medium: { type: Sequelize.STRING, allowNull: false },
             medium_transaction_id: { type: Sequelize.STRING, allowNull: false },
-            driver_rating: { type: Sequelize.DOUBLE, allowNull: false, defaultValue: 0 },
-            space_rating: { type: Sequelize.DOUBLE, allowNull: false, defaultValue: 0 },
         }, {
             sequelize,
             modelName: 'booking',
         })
         model.removeAttribute('id')
         return model
+    }
+
+    static buildBooking(space_id, driver_id, from_time, to_time, total_price, status){
+        return super.build({
+            space_id, driver_id, from_time, to_time, total_price, status,
+            payment_id: 123, payment_status: "null", payment_medium: "null", medium_transaction_id: 123
+        })
+    }
+
+    static async is_time_available(space_id, from_time, to_time){
+        const bookings = await this.sequelize.query(`
+            select 1 from booking
+            where space_id = :space_id
+            and status = 'active'
+            and (
+                (:from_time between from_time and to_time)
+                or (:to_time between from_time and to_time)
+                );`, {
+            replacements: {space_id, from_time, to_time},
+            type: this.sequelize.QueryTypes.SELECT
+        })
+        return bookings.length == 0
     }
 }

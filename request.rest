@@ -37,10 +37,23 @@ Authorization: Bearer {{access_token}}
 
 ###
 POST {{baseURL}}/search/quick
+Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-    "latitude": 37.3688,
-    "longitude": -122.0279,
-    "city": "sunnyvale"
+    "latitude": 23.74511054543808, 
+    "longitude": 90.3720274758841,
+    "city": "dhaka"
+}
+
+###
+POST {{baseURL}}/booking/request
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "space_id": 11,
+    "from_time": 1692551064093,
+    "to_time": 1692554711212,
+    "price": 69
 }

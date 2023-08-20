@@ -8,6 +8,7 @@ const regRoute = require("./routes/register")
 const authRoute = require("./routes/auth")
 const protectedRoute = require("./routes/protected")
 const searchRoute = require("./routes/search")
+const bookingRoute = require("./routes/booking")
 const Utils = require("./utils/utils");
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/search", searchRoute)
 app.use("/register", regRoute)
 app.use("/auth", authRoute)
 app.use("/protected", passport.authenticate("jwt", {session: false}), protectedRoute)
+app.use("/booking", passport.authenticate("jwt", {session: false}), bookingRoute)
 app.use("/", (req, res) => {
   res.send("Welcome to hell!");
 });

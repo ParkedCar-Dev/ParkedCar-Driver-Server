@@ -53,8 +53,10 @@ module.exports = class Space extends Model{
                     WHERE
                         b.space_id = s.space_id
                         AND b.status = 'active'
-                        AND b.from_time < :to_time
-                        AND b.to_time > :from_time);`, 
+                        AND (
+                            :from_time BETWEEN b.from_time AND b.to_time
+                            OR :to_time BETWEEN b.from_time AND b.to_time
+                        ));`, 
         {
             replacements: {
                 city: city,
@@ -66,6 +68,11 @@ module.exports = class Space extends Model{
             },
             type: this.sequelize.QueryTypes.SELECT
         })
+    }
+
+    static async is_auto_approve(space_id){
+        const space = await this.findOne({where: {space_id: space_id}}, {attributes: ['auto_approve']})
+        return space.auto_approve
     }
     
 }  
