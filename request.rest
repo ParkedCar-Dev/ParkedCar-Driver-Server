@@ -55,9 +55,9 @@ Content-Type: application/json
     "latitude": 23.74511054543808, 
     "longitude": 90.3720274758841,
     "city": "dhaka",
-    "from": 1692551064093,
-    "to": 1692554711212,
-    "price": 100,
+    "from": 1692905753000,
+    "to":  1692932453000,
+    "price": 1000,
     "distance": 3000,
     "security_measures": ["guard", "cctv"],
     "auto_approve": false
@@ -71,7 +71,7 @@ Content-Type: application/json
 
 {
     "space_id": 11,
-    "from_time": 2692551064093,
-    "to_time": 2692554711212,
+    "from_time": 1692551064093,
+    "to_time": 1692554711212,
     "price": 69
 }

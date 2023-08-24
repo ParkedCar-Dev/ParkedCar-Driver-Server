@@ -39,7 +39,7 @@ module.exports = class SearchController{
     static async advancedSearch(req, res){
         const [latitude, longitude, city, from, to, distance, security_measures, auto_approve, price] = [req.body.latitude, req.body.longitude, req.body.city, req.body.from, req.body.to, req.body.distance, req.body.security_measures, req.body.auto_approve, req.body.price];
         try{
-            if (Utils.checkNullOrUndefined([latitude, longitude, city, from, to, distance, security_measures, auto_approve, price])){
+            if (Utils.checkNullOrUndefined([latitude, longitude, city, from, to, distance, security_measures, auto_approve, price]) || (from >= to)){
                 return res.json({status: "error", message: "Invalid form submission.", spaces: null})
             }
             const [guard, indoor, cc] = [security_measures.includes("guard"), security_measures.includes("indoor"), security_measures.includes("cc") || security_measures.includes("cctv")];
@@ -55,7 +55,6 @@ module.exports = class SearchController{
             })
 
             var result = Space.makeResult(spaces, prices);
-
             result = Space.filterByPrice(result, price);
 
             res.json({status: "success", message: "Advanced search successful.", spaces: result})
