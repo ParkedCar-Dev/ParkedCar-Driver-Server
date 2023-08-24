@@ -29,8 +29,8 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.driver = require("./driver.js")(sequelize, Sequelize);
-db.space_owner = require("./space_owner.js")(sequelize, Sequelize);
-db.space = require("./space.js")(sequelize, Sequelize);
+db.driver = require("./driver.js").init(sequelize, Sequelize);
+db.space = require("./space.js").init(sequelize, Sequelize);
 db.time_slot_price = require("./time_slot_prices.js")(sequelize, Sequelize);
+db.bookings = require("./booking.js").init(sequelize, Sequelize);
 module.exports = db;

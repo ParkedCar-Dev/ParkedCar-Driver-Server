@@ -4,6 +4,7 @@ const router = exxpress.Router();
 
 const SearchController = require('../controllers/search');
 
-router.get('/quick', SearchController.quickSearch);
+router.post('/quick', SearchController.quickSearch);
+router.post('/advanced', SearchController.advancedSearch);
 
 module.exports = router;
