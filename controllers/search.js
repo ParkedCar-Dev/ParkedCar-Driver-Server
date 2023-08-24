@@ -42,6 +42,7 @@ module.exports = class SearchController{
                     user_id: space.user_id,
                     rating: space.rating,
                     total_books: space.total_books,
+                    owner_name: space.owner_name,
                 }
             })
 

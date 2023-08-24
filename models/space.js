@@ -33,13 +33,15 @@ module.exports = class Space extends Model{
 
     static async find_available_spaces(city, latitude, longitude, from, to, distance){
         return await this.sequelize.query(
-            `Select s.*,
+            `Select s.*, space_owner.name as owner_name,
             earth_distance(
                 ll_to_earth(:latitude, :longitude),
                 ll_to_earth(s.latitude, s.longitude)
             ) as distance
             FROM
                 space s
+            INNER JOIN 
+                space_owner ON space_owner.user_id = s.user_id
             WHERE
                 lower(s.city) = lower(:city)
                 AND s.status = 'active'
