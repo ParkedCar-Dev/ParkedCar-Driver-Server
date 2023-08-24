@@ -5,13 +5,49 @@
 //     additional_price double precision not null
 // );
 
-module.exports = (sequelize, Sequelize) => {
-    const TIME_SLOT_PRICE = sequelize.define("time_slot_prices", {
-        time_slot_id: { type: Sequelize.INTEGER },
-        from_time: { type: Sequelize.INTEGER, allowNull: false },
-        to_time: { type: Sequelize.INTEGER, allowNull: false },
-        additional_price: { type: Sequelize.DOUBLE, allowNull: false }
-        });
-    TIME_SLOT_PRICE.removeAttribute('id');
-    return TIME_SLOT_PRICE;
+const { Model } = require("sequelize");
+
+module.exports = class TimeSlotPrice extends Model {
+    static prices = null;
+    static init(sequelize, DataTypes) {
+        const model =  super.init(
+            {
+                time_slot_id: {
+                    type: DataTypes.INTEGER,
+                    primaryKey: true,
+                    autoIncrement: true
+                },
+                from_time: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false
+                },
+                to_time: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false
+                },
+                additional_price: {
+                    type: DataTypes.DOUBLE,
+                    allowNull: false
+                }
+            },
+            {
+                tableName: "time_slot_prices",
+                sequelize
+            }
+        );
+        model.removeAttribute("id");
+        return model;
+    }
+
+    static async getPrices() {
+        if (TimeSlotPrice.prices == null) {
+            console.log("Fetching time slot prices from database");
+            TimeSlotPrice.prices = await this.findAll(
+                {
+                    attributes: ["additional_price"]
+                }
+            );
+        }
+        return TimeSlotPrice.prices;
+    }
 }

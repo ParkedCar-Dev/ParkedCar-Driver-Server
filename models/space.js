@@ -90,7 +90,7 @@ module.exports = class Space extends Model{
         })
     }
 
-    static makeResult(spaces, prices){
+    static makeResult(spaces, additional_price){
         return spaces.map((space, index) => {
             return {
                 id: space.space_id,
@@ -98,7 +98,7 @@ module.exports = class Space extends Model{
                 latitude: space.latitude,
                 longitude: space.longitude,
                 distance: space.distance,
-                price: prices[index],
+                price: additional_price + space.base_fare,
                 security_measures: space.security_measures,
                 width: space.width,
                 height: space.height,

@@ -1,5 +1,3 @@
-const db = require('../models');
-
 module.exports = class Utils {
     
     static calculatePrice(from, to, time_slot_prices) {
@@ -23,20 +21,29 @@ module.exports = class Utils {
                 total_price += time_slot_prices[i].additional_price;
             }
         } else {
-            var f_index = (fromHour + 1) % 24;
-            var t_index = (toHour + 1) % 24;
-            for (var i = f_index; i < 24; i++) {
-                total_price += time_slot_prices[i].additional_price;
+            if (fromHour > toHour) {
+                var f_index = (fromHour + 1) % 24;
+                var t_index = (toHour + 1) % 24;
+                for (var i = f_index; i < 24; i++) {
+                    total_price += time_slot_prices[i].additional_price;
+                }
+                for (var i = 0; i < t_index; i++) {
+                    total_price += time_slot_prices[i].additional_price;
+                }
             }
-            for (var i = 0; i < t_index; i++) {
-                total_price += time_slot_prices[i].additional_price;
+            else {
+                var f_index = (fromHour + 1) % 24;
+                var t_index = (toHour + 1) % 24;
+                for (var i = f_index; i < t_index; i++) {
+                    total_price += time_slot_prices[i].additional_price;
+                }
             }
         }
 
         total_price -= time_slot_prices[f_index].additional_price * fromMinute / 60;
         total_price += time_slot_prices[t_index].additional_price * toMinute / 60;
 
-        return total_price;
+        return Math.floor(total_price);
     }
 
     static checkNullOrUndefined(array) {

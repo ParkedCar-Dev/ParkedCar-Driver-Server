@@ -1,7 +1,7 @@
 const Utils = require('../utils/utils');
 const Space = require('../models/space');
-const Booking = require('../models/booking');
-const db = require('../models/index');
+const TimeSlotPrice = require('../models/time_slot_prices');
+
 
 module.exports = class SearchController{
     static async quickSearch(req, res){
@@ -13,20 +13,10 @@ module.exports = class SearchController{
             }
             const from = Date.now();
             const to = from + 3600000;
-
             const spaces = await Space.findAvailableSpaces(city, latitude, longitude, from, to, default_distance, false, false, false, false);
-
-            const time_slot_prices = await db.time_slot_price.findAll({
-                attributes: ['additional_price'],
-            })
-            
+            const time_slot_prices = await TimeSlotPrice.getPrices();
             const additional_price = Utils.calculatePrice(from, to, time_slot_prices);
-
-            const prices = spaces.map(space => {
-                return space.base_fare + additional_price;
-            })
-
-            var result = Space.makeResult(spaces, prices);
+            var result = Space.makeResult(spaces, additional_price);
 
             res.json({status: "success", message: "Quick search successful.", spaces: result})
 
@@ -44,17 +34,9 @@ module.exports = class SearchController{
             }
             const [guard, indoor, cc] = [security_measures.includes("guard"), security_measures.includes("indoor"), security_measures.includes("cc") || security_measures.includes("cctv")];
             const spaces = await Space.findAvailableSpaces(city, latitude, longitude, from, to, distance, guard, indoor, cc, auto_approve);
-            const time_slot_prices = await db.time_slot_price.findAll({
-                attributes: ['additional_price'],
-            })
-
+            const time_slot_prices = await TimeSlotPrice.getPrices();
             const additional_price = Utils.calculatePrice(from, to, time_slot_prices);
-
-            const prices = spaces.map(space => {
-                return space.base_fare + additional_price;
-            })
-
-            var result = Space.makeResult(spaces, prices);
+            var result = Space.makeResult(spaces, additional_price);
             result = Space.filterByPrice(result, price);
 
             res.json({status: "success", message: "Advanced search successful.", spaces: result})

@@ -9,7 +9,6 @@ const authRoute = require("./routes/auth")
 const protectedRoute = require("./routes/protected")
 const searchRoute = require("./routes/search")
 const bookingRoute = require("./routes/booking")
-const Utils = require("./utils/utils");
 
 const app = express();
 app.use(express.json())
