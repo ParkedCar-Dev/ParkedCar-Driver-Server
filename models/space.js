@@ -1,5 +1,4 @@
 const {Model} = require('sequelize')
-const Utils = require('../utils/utils')
 
 module.exports = class Space extends Model{
     static init(sequelize, Sequelize){
@@ -31,7 +30,7 @@ module.exports = class Space extends Model{
         return model
     }
 
-    static async find_available_spaces(city, latitude, longitude, from, to, distance){
+    static async findAvailableSpaces(city, latitude, longitude, from, to, distance, guard, indoor, cc, auto_approve){
         return await this.sequelize.query(
             `Select s.*, space_owner.name as owner_name,
             earth_distance(
@@ -45,6 +44,10 @@ module.exports = class Space extends Model{
             WHERE
                 lower(s.city) = lower(:city)
                 AND s.status = 'active'
+                AND (NOT :auto_approve OR s.auto_approve = :auto_approve)
+                AND (NOT :guard OR s.security_measures LIKE '%guard%')
+                AND (NOT :indoor OR s.security_measures LIKE '%indoor%')
+                AND (NOT :cc OR s.security_measures LIKE '%cc%')
                 AND earth_distance(
                     ll_to_earth(:latitude, :longitude),
                     ll_to_earth(s.latitude, s.longitude)
@@ -66,15 +69,46 @@ module.exports = class Space extends Model{
                 longitude: longitude,
                 from_time: from,
                 to_time: to,
-                distance: distance
+                distance: distance,
+                guard: guard,
+                indoor: indoor,
+                cc: cc,
+                auto_approve: auto_approve
             },
             type: this.sequelize.QueryTypes.SELECT
         })
     }
 
-    static async is_auto_approve(space_id){
+    static async isAutoApprove(space_id){
         const space = await this.findOne({where: {space_id: space_id}}, {attributes: ['auto_approve']})
         return space.auto_approve
     }
-    
+
+    static filterByPrice(result, price){
+        return result.filter(space => {
+            return space.price <= price;
+        })
+    }
+
+    static makeResult(spaces, prices){
+        return spaces.map((space, index) => {
+            return {
+                id: space.space_id,
+                address: space.address,
+                latitude: space.latitude,
+                longitude: space.longitude,
+                distance: space.distance,
+                price: prices[index],
+                security_measures: space.security_measures,
+                width: space.width,
+                height: space.height,
+                length: space.length,
+                auto_approve: space.auto_approve,
+                user_id: space.user_id,
+                rating: space.rating,
+                total_books: space.total_books,
+                owner_name: space.owner_name,
+            }
+        })
+    }
 }  

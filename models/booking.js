@@ -47,7 +47,7 @@ module.exports = class Booking extends Model{
         })
     }
 
-    static async is_time_available(space_id, from_time, to_time){
+    static async isTimeAvailable(space_id, from_time, to_time){
         const bookings = await this.sequelize.query(`
             select 1 from booking
             where space_id = :space_id

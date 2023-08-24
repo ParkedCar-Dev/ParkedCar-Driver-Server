@@ -21,12 +21,6 @@ module.exports = class Utils {
         return price;
     }
 
-    static filterByPrice(spaces, prices, price) {
-        return spaces.filter((space, index) => {
-            return prices[index] <= price;
-        });
-    }
-
     static checkNullOrUndefined(array) {
         for (var i = 0; i < array.length; i++) {
             if (array[i] == null || array[i] == undefined) {

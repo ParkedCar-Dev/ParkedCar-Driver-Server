@@ -9,8 +9,8 @@ module.exports = class BookingController {
             if(Utils.checkNullOrUndefined([space_id, from_time, to_time, price, user_id])){
                 return res.json({status: "error", message: "Invalid request."})
             }
-            const isAvailable = await Booking.is_time_available(space_id, from_time, to_time)
-            const isAutoApprove = await Space.is_auto_approve(space_id)
+            const isAvailable = await Booking.isTimeAvailable(space_id, from_time, to_time)
+            const isAutoApprove = await Space.isAutoApprove(space_id)
 
             if(!isAvailable){
                 return res.json({status: "error", message: "Space is not available for the requested time."})
@@ -25,4 +25,6 @@ module.exports = class BookingController {
             return res.json({status: "error", message: "Something went wrong."})
         }
     }
+
+
 }
