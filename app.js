@@ -24,7 +24,7 @@ db.sequelize.sync()
     console.log("Failed to sync db: " + err.message);
   });
 
-app.use("/search", searchRoute)
+app.use("/search", passport.authenticate("jwt", {session: false}), searchRoute)
 app.use("/register", regRoute)
 app.use("/auth", authRoute)
 app.use("/protected", passport.authenticate("jwt", {session: false}), protectedRoute)
