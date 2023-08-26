@@ -1,19 +1,3 @@
-// create table if not exists booking(
-//     booking_id serial not null primary key,
-//     space_id integer not null references space(space_id),
-//     driver_id integer not null references driver(user_id),
-//     from_time bigint not null,
-//     to_time bigint not null,
-//     status varchar(255) not null,
-//     created_at timestamp not null,
-//     updated_at timestamp not null,
-//     total_price double precision not null,
-//     payment_id varchar(255) not null,
-//     payment_status varchar(255) not null,
-//     payment_medium varchar(255) not null,
-//     medium_transaction_id varchar(255) not null
-// );
-
 const {Model, Op} = require('sequelize')
 
 module.exports = class Booking extends Model{

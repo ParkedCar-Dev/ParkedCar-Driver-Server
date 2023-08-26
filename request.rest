@@ -70,8 +70,16 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-    "space_id": 11,
+    "space_id": 39,
     "from_time": 1692551064093,
-    "to_time": 1692554711212,
-    "price": 69
+    "to_time": 1692554711212
 }
+
+
+###
+GET {{baseURL}}/booking/17
+Authorization: Bearer {{access_token}}
+
+###
+GET {{baseURL}}/booking/status/15
+Authorization: Bearer {{access_token}}

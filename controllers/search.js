@@ -5,8 +5,8 @@ const TimeSlotPrice = require('../models/time_slot_prices');
 
 module.exports = class SearchController{
     static async quickSearch(req, res){
-        const default_distance = parseInt(process.env.DEFAULT_DISTANCE);
-        try{
+       try{
+            const default_distance = parseInt(process.env.DEFAULT_DISTANCE);
             const [latitude, longitude, city] = [req.body.latitude, req.body.longitude, req.body.city];
             if (!latitude || !longitude || !city){
                 return res.json({status: "error", message: "Invalid form submission.", spaces: null})

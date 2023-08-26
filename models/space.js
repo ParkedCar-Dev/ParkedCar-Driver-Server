@@ -79,9 +79,9 @@ module.exports = class Space extends Model{
         })
     }
 
-    static async isAutoApprove(space_id){
-        const space = await this.findOne({where: {space_id: space_id}}, {attributes: ['auto_approve']})
-        return space.auto_approve
+    static async checkAutoApproveAndBaseFare(space_id){
+        const space = await this.findOne({where: {space_id: space_id}}, {attributes: ['auto_approve', 'base_fare']})
+        return [space.auto_approve, space.base_fare]
     }
 
     static filterByPrice(result, price){
