@@ -16,6 +16,7 @@ module.exports = class Booking extends Model{
             payment_status: { type: Sequelize.STRING, allowNull: false },
             payment_medium: { type: Sequelize.STRING, allowNull: false },
             medium_transaction_id: { type: Sequelize.STRING, allowNull: false },
+            base_fare: { type: Sequelize.DOUBLE, allowNull: false },
         }, {
             sequelize,
             modelName: 'booking',
@@ -24,9 +25,9 @@ module.exports = class Booking extends Model{
         return model
     }
 
-    static buildBooking(space_id, driver_id, from_time, to_time, total_price, status){
+    static buildBooking(space_id, driver_id, from_time, to_time, total_price, status, base_fare){
         return super.build({
-            space_id, driver_id, from_time, to_time, total_price, status,
+            space_id, driver_id, from_time, to_time, total_price, status, base_fare,
             payment_id: 123, payment_status: "null", payment_medium: "null", medium_transaction_id: 123
         })
     }

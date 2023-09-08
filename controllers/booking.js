@@ -19,7 +19,7 @@ module.exports = class BookingController {
 
             const price = Utils.calculatePrice(from_time, to_time, await TimeSlotPrices.getPrices()) + base_fare
             
-            const booking = Booking.buildBooking(space_id, user_id, from_time, to_time, price, isAutoApprove ? "active" : "requested")
+            const booking = Booking.buildBooking(space_id, user_id, from_time, to_time, price, isAutoApprove ? "active" : "requested", base_fare)
             await booking.save()
 
             return res.json({status: "success", message: "Booking request sent.", booking_id: booking.booking_id})
