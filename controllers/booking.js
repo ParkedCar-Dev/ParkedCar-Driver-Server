@@ -130,7 +130,11 @@ module.exports = class BookingController {
             let bookings = []
             if(status == 'past'){
                 bookings = await Booking.getPastBookings(req.user.user_id)
-            } else {
+            } 
+            else if(status == 'current'){
+                bookings = await Booking.getCurrentBookings(req.user.user_id)
+            } 
+            else {
                 bookings = await Booking.getBookingsByStatus(status, req.user.user_id)
             }
             return res.json({status: "success", message: "Bookings found.", bookings: bookings})
