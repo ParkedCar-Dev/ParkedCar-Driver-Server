@@ -31,7 +31,7 @@ module.exports = class BookingController {
 
     static async getBooking(req, res){
         try{
-            const booking_id = req.params.booking_id
+            const booking_id = req.body.booking_id
             const booking = await Booking.findOne({where: {booking_id: booking_id}})
             if(!booking){
                 return res.json({status: "error", message: "Booking not found.", booking: null})
@@ -48,7 +48,7 @@ module.exports = class BookingController {
 
     static async getStatus(req, res){
         try{
-            const booking_id = req.params.booking_id
+            const booking_id = req.body.booking_id
             const booking = await Booking.findOne({where: {booking_id: booking_id}})
             if(!booking){
                 return res.json({status: "error", message: "Booking not found.", status: null})
@@ -60,6 +60,28 @@ module.exports = class BookingController {
         }catch(err){
             console.error(err.message)
             return res.json({status: "error", message: "Something went wrong.", status: null})
+        }
+    }
+
+    static async cancelBooking(req, res){
+        try{
+            const booking_id = req.body.booking_id
+            const booking = await Booking.findOne({where: {booking_id: booking_id}})
+            if(!booking){
+                return res.json({status: "error", message: "Booking not found.", booking: null})
+            }
+            if(booking.driver_id != req.user.user_id){
+                return res.json({status: "error", message: "You are not authorized to cancel this booking.", booking: null})
+            }
+            if(booking.status != "active" || booking.status != "requested"){
+                return res.json({status: "error", message: "Booking cannot be cancelled.", booking: null})
+            }
+            booking.status = "cancelled"
+            await booking.save()
+            return res.json({status: "success", message: "Booking cancelled.", booking: booking})
+        }catch(err){
+            console.error(err.message)
+            return res.json({status: "error", message: "Something went wrong.", booking: null})
         }
     }
 }

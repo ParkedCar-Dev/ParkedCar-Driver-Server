@@ -77,9 +77,28 @@ Content-Type: application/json
 
 
 ###
-GET {{baseURL}}/booking/17
+POST {{baseURL}}/booking/getBooking
 Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "booking_id": 17
+}
 
 ###
-GET {{baseURL}}/booking/status/15
+POST {{baseURL}}/booking/status
 Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "booking_id": 17
+}
+
+###
+POST {{baseURL}}/booking/cancel
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "booking_id": 17
+}
