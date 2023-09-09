@@ -102,3 +102,21 @@ Content-Type: application/json
 {
     "booking_id": 17
 }
+
+###
+POST {{baseURL}}/booking/paymentStatus
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "booking_id": 17
+}
+
+###
+POST {{baseURL}}/booking/payFare
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "booking_id": 17
+}

@@ -84,4 +84,43 @@ module.exports = class BookingController {
             return res.json({status: "error", message: "Something went wrong.", booking: null})
         }
     }
+
+    static async getPaymentStatus(req, res){
+        try{
+            const booking_id = req.body.booking_id
+            const booking = await Booking.findOne({where: {booking_id: booking_id}})
+            if(!booking){
+                return res.json({status: "error", message: "Booking not found.", payment_status: null})
+            }
+            if(booking.driver_id != req.user.user_id){
+                return res.json({status: "error", message: "You are not authorized to view this booking.", payment_status: null})
+            }
+            return res.json({status: "success", message: "Booking found.", payment_status: booking.payment_status})
+        }catch(err){
+            console.error(err.message)
+            return res.json({status: "error", message: "Something went wrong.", payment_status: null})
+        }
+    }
+
+    static async payFare(req, res){
+        try{
+            const booking_id = req.body.booking_id
+            const booking = await Booking.findOne({where: {booking_id: booking_id}})
+            if(!booking){
+                return res.json({status: "error", message: "Booking not found."})
+            }
+            if(booking.driver_id != req.user.user_id){
+                return res.json({status: "error", message: "You are not authorized to view this booking."})
+            }
+            if(booking.payment_status != "unpaid"){
+                return res.json({status: "error", message: "Payment already done."})
+            }
+            booking.payment_status = "paid"
+            await booking.save()
+            return res.json({status: "success", message: "Payment done."})
+        }catch(err){
+            console.error(err.message)
+            return res.json({status: "error", message: "Something went wrong."})
+        }
+    }
 }

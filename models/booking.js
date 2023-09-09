@@ -28,7 +28,7 @@ module.exports = class Booking extends Model{
     static buildBooking(space_id, driver_id, from_time, to_time, total_price, status, base_fare){
         return super.build({
             space_id, driver_id, from_time, to_time, total_price, status, base_fare,
-            payment_id: 123, payment_status: "null", payment_medium: "null", medium_transaction_id: 123
+            payment_id: 123, payment_status: "unpaid", payment_medium: "null", medium_transaction_id: 123
         })
     }
 
