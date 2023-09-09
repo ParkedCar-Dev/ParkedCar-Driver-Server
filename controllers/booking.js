@@ -160,14 +160,19 @@ module.exports = class BookingController {
             if(booking.status != "completed"){
                 return res.json({status: "error", message: "Booking is not completed."})
             }
+            if(booking.is_rated){
+                return res.json({status: "error", message: "Booking is already rated."})
+            }
             const space = await Space.findOne({where: {space_id: booking.space_id}})
             if(!space){
                 return res.json({status: "error", message: "Space not found."})
             }
+            booking.is_rated = true
             const [oldRating, oldCount] = [space.rating, space.no_ratings]
             space.rating = (oldRating * oldCount + rating) / (oldCount + 1)
             space.no_ratings = oldCount + 1
             await space.save()
+            await booking.save()
             return res.json({status: "success", message: "Space reviewed."})
         }catch(err){
             console.error(err.message)
