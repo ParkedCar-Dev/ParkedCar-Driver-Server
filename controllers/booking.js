@@ -143,4 +143,35 @@ module.exports = class BookingController {
             return res.json({status: "error", message: "Something went wrong.", bookings: null})
         }
     }
+
+    static async rateSpace(req, res){
+        try{
+            const [booking_id, rating] = [req.body.booking_id, req.body.rating]
+            if(Utils.checkNullOrUndefined([booking_id, rating])){
+                return res.json({status: "error", message: "Invalid request."})
+            }
+            const booking = await Booking.findOne({where: {booking_id: booking_id}})
+            if(!booking){
+                return res.json({status: "error", message: "Booking not found."})
+            }
+            if(booking.driver_id != req.user.user_id){
+                return res.json({status: "error", message: "You are not authorized to review this booking."})
+            }
+            if(booking.status != "completed"){
+                return res.json({status: "error", message: "Booking is not completed."})
+            }
+            const space = await Space.findOne({where: {space_id: booking.space_id}})
+            if(!space){
+                return res.json({status: "error", message: "Space not found."})
+            }
+            const [oldRating, oldCount] = [space.rating, space.rating_count]
+            space.rating = (oldRating * oldCount + rating) / (oldCount + 1)
+            space.rating_count = oldCount + 1
+            await space.save()
+            return res.json({status: "success", message: "Space reviewed."})
+        }catch(err){
+            console.error(err.message)
+            return res.json({status: "error", message: "Something went wrong."})
+        }
+    }
 }
