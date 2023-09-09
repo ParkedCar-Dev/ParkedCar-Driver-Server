@@ -21,7 +21,8 @@ module.exports = class Space extends Model{
             created_at: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.NOW },
             updated_at: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.NOW },
             availability_mask: { type: Sequelize.STRING, allowNull: false },
-            time_slots: { type: Sequelize.ARRAY(Sequelize.BOOLEAN), allowNull: false }
+            time_slots: { type: Sequelize.ARRAY(Sequelize.BOOLEAN), allowNull: false },
+            no_ratings: { type: Sequelize.INTEGER, allowNull: false, defaultValue: 0 },
             }, {
                 sequelize,
                 modelName: 'space',

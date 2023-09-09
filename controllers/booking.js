@@ -164,9 +164,9 @@ module.exports = class BookingController {
             if(!space){
                 return res.json({status: "error", message: "Space not found."})
             }
-            const [oldRating, oldCount] = [space.rating, space.rating_count]
+            const [oldRating, oldCount] = [space.rating, space.no_ratings]
             space.rating = (oldRating * oldCount + rating) / (oldCount + 1)
-            space.rating_count = oldCount + 1
+            space.no_ratings = oldCount + 1
             await space.save()
             return res.json({status: "success", message: "Space reviewed."})
         }catch(err){
