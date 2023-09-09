@@ -41,9 +41,9 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-    "latitude": 23.74511054543808, 
-    "longitude": 90.3720274758841,
-    "city": "dhaka"
+    "latitude": 37.3694, 
+    "longitude": -122.0453,
+    "city": "sunnyvale"
 }
 
 ###
@@ -119,4 +119,14 @@ Content-Type: application/json
 
 {
     "booking_id": 17
+}
+
+
+###
+POST {{baseURL}}/booking/getDriverBookings
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "status": "past"
 }

@@ -10,5 +10,6 @@ router.post("/status", BookingController.getStatus);
 router.post("/cancel", BookingController.cancelBooking);
 router.post("/paymentStatus", BookingController.getPaymentStatus);
 router.post("/payFare", BookingController.payFare);
+router.post("/getDriverBookings", BookingController.getDriverBookings);
 
 module.exports = router;

@@ -123,4 +123,20 @@ module.exports = class BookingController {
             return res.json({status: "error", message: "Something went wrong."})
         }
     }
+
+    static async getDriverBookings(req, res){
+        try{
+            const status = req.body.status
+            let bookings = []
+            if(status == 'past'){
+                bookings = await Booking.getPastBookings(req.user.user_id)
+            } else {
+                bookings = await Booking.getBookingsByStatus(status, req.user.user_id)
+            }
+            return res.json({status: "success", message: "Bookings found.", bookings: bookings})
+        }catch(err){
+            console.error(err.message)
+            return res.json({status: "error", message: "Something went wrong.", bookings: null})
+        }
+    }
 }

@@ -46,4 +46,37 @@ module.exports = class Booking extends Model{
         })
         return bookings.length == 0
     }
+
+    static async getBookingsByStatus(status, driver_id){
+        return await Booking.sequelize.query(
+            `SELECT booking.booking_id, booking.from_time, booking.to_time, booking.status, booking.base_fare,
+            booking.total_price as total_fare, booking.payment_id, booking.payment_status, booking.payment_medium,
+            space.address as address, space.city as city, space.rating as rating,
+            booking.total_price - booking.base_fare as time_fare
+            FROM booking 
+            INNER JOIN space ON booking.space_id = space.space_id 
+            WHERE booking.driver_id = :driver_id AND booking.status = :status`,
+            {
+                replacements: {driver_id: driver_id, status: status},
+                type: Booking.sequelize.QueryTypes.SELECT
+            }
+        )
+    }
+
+    static async getPastBookings(driver_id){
+        return await Booking.sequelize.query(
+            `SELECT booking.booking_id, booking.from_time, booking.to_time, booking.status, booking.base_fare,
+            booking.total_price as total_fare, booking.payment_id, booking.payment_status, booking.payment_medium,
+            space.address as address, space.city as city, space.rating as rating,
+            booking.total_price - booking.base_fare as time_fare
+            FROM booking 
+            INNER JOIN space ON booking.space_id = space.space_id 
+            WHERE booking.driver_id = :driver_id AND (booking.status = 'completed' 
+            OR booking.status = 'cancelled' OR booking.status = 'declined')`,
+            {
+                replacements: {driver_id: driver_id},
+                type: Booking.sequelize.QueryTypes.SELECT
+            }
+        )
+    }
 }
