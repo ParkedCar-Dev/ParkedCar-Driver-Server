@@ -21,7 +21,8 @@ module.exports = class Space extends Model{
             created_at: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.NOW },
             updated_at: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.NOW },
             availability_mask: { type: Sequelize.STRING, allowNull: false },
-            time_slots: { type: Sequelize.ARRAY(Sequelize.BOOLEAN), allowNull: false }
+            time_slots: { type: Sequelize.ARRAY(Sequelize.BOOLEAN), allowNull: false },
+            no_ratings: { type: Sequelize.INTEGER, allowNull: false, defaultValue: 0 },
             }, {
                 sequelize,
                 modelName: 'space',
@@ -79,9 +80,9 @@ module.exports = class Space extends Model{
         })
     }
 
-    static async isAutoApprove(space_id){
-        const space = await this.findOne({where: {space_id: space_id}}, {attributes: ['auto_approve']})
-        return space.auto_approve
+    static async checkAutoApproveAndBaseFare(space_id){
+        const space = await this.findOne({where: {space_id: space_id}}, {attributes: ['auto_approve', 'base_fare']})
+        return [space.auto_approve, space.base_fare]
     }
 
     static filterByPrice(result, price){
@@ -90,7 +91,7 @@ module.exports = class Space extends Model{
         })
     }
 
-    static makeResult(spaces, prices){
+    static makeResult(spaces, additional_price){
         return spaces.map((space, index) => {
             return {
                 id: space.space_id,
@@ -98,7 +99,7 @@ module.exports = class Space extends Model{
                 latitude: space.latitude,
                 longitude: space.longitude,
                 distance: space.distance,
-                price: prices[index],
+                price: additional_price + space.base_fare,
                 security_measures: space.security_measures,
                 width: space.width,
                 height: space.height,

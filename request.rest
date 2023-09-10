@@ -41,9 +41,9 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-    "latitude": 23.74511054543808, 
-    "longitude": 90.3720274758841,
-    "city": "dhaka"
+    "latitude": 37.3694, 
+    "longitude": -122.0453,
+    "city": "sunnyvale"
 }
 
 ###
@@ -55,9 +55,9 @@ Content-Type: application/json
     "latitude": 23.74511054543808, 
     "longitude": 90.3720274758841,
     "city": "dhaka",
-    "from": 1692551064093,
-    "to": 1692554711212,
-    "price": 100,
+    "from": 1692909353000,
+    "to":  1692995753000,
+    "price": 2000,
     "distance": 3000,
     "security_measures": ["guard", "cctv"],
     "auto_approve": false
@@ -70,8 +70,63 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-    "space_id": 11,
-    "from_time": 2692551064093,
-    "to_time": 2692554711212,
-    "price": 69
+    "space_id": 39,
+    "from_time": 1692551064093,
+    "to_time": 1692554711212
+}
+
+
+###
+POST {{baseURL}}/booking/getBooking
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "booking_id": 17
+}
+
+###
+POST {{baseURL}}/booking/status
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "booking_id": 17
+}
+
+###
+POST {{baseURL}}/booking/cancel
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "booking_id": 17
+}
+
+###
+POST {{baseURL}}/booking/paymentStatus
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "booking_id": 17
+}
+
+###
+POST {{baseURL}}/booking/payFare
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "booking_id": 17
+}
+
+
+###
+POST {{baseURL}}/booking/getDriverBookings
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "status": "current"
 }

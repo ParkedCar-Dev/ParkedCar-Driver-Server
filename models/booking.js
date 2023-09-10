@@ -1,19 +1,3 @@
-// create table if not exists booking(
-//     booking_id serial not null primary key,
-//     space_id integer not null references space(space_id),
-//     driver_id integer not null references driver(user_id),
-//     from_time bigint not null,
-//     to_time bigint not null,
-//     status varchar(255) not null,
-//     created_at timestamp not null,
-//     updated_at timestamp not null,
-//     total_price double precision not null,
-//     payment_id varchar(255) not null,
-//     payment_status varchar(255) not null,
-//     payment_medium varchar(255) not null,
-//     medium_transaction_id varchar(255) not null
-// );
-
 const {Model, Op} = require('sequelize')
 
 module.exports = class Booking extends Model{
@@ -32,6 +16,8 @@ module.exports = class Booking extends Model{
             payment_status: { type: Sequelize.STRING, allowNull: false },
             payment_medium: { type: Sequelize.STRING, allowNull: false },
             medium_transaction_id: { type: Sequelize.STRING, allowNull: false },
+            base_fare: { type: Sequelize.DOUBLE, allowNull: false },
+            is_rated: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
         }, {
             sequelize,
             modelName: 'booking',
@@ -40,10 +26,10 @@ module.exports = class Booking extends Model{
         return model
     }
 
-    static buildBooking(space_id, driver_id, from_time, to_time, total_price, status){
+    static buildBooking(space_id, driver_id, from_time, to_time, total_price, status, base_fare){
         return super.build({
-            space_id, driver_id, from_time, to_time, total_price, status,
-            payment_id: 123, payment_status: "null", payment_medium: "null", medium_transaction_id: 123
+            space_id, driver_id, from_time, to_time, total_price, status, base_fare,
+            payment_id: 123, payment_status: "unpaid", payment_medium: "null", medium_transaction_id: 123
         })
     }
 
@@ -60,5 +46,55 @@ module.exports = class Booking extends Model{
             type: this.sequelize.QueryTypes.SELECT
         })
         return bookings.length == 0
+    }
+
+    static async getBookingsByStatus(status, driver_id){
+        return await Booking.sequelize.query(
+            `SELECT booking.booking_id, booking.from_time, booking.to_time, booking.status, booking.base_fare,
+            booking.total_price as total_fare, booking.payment_id, booking.payment_status, booking.payment_medium,
+            space.address as address, space.city as city, space.rating as rating, booking.is_rated,
+            booking.total_price - booking.base_fare as time_fare
+            FROM booking 
+            INNER JOIN space ON booking.space_id = space.space_id 
+            WHERE booking.driver_id = :driver_id AND booking.status = :status`,
+            {
+                replacements: {driver_id: driver_id, status: status},
+                type: Booking.sequelize.QueryTypes.SELECT
+            }
+        )
+    }
+
+    static async getPastBookings(driver_id){
+        return await Booking.sequelize.query(
+            `SELECT booking.booking_id, booking.from_time, booking.to_time, booking.status, booking.base_fare,
+            booking.total_price as total_fare, booking.payment_id, booking.payment_status, booking.payment_medium,
+            space.address as address, space.city as city, space.rating as rating, booking.is_rated,
+            booking.total_price - booking.base_fare as time_fare
+            FROM booking 
+            INNER JOIN space ON booking.space_id = space.space_id 
+            WHERE booking.driver_id = :driver_id AND (booking.status = 'completed' 
+            OR booking.status = 'cancelled' OR booking.status = 'declined')`,
+            {
+                replacements: {driver_id: driver_id},
+                type: Booking.sequelize.QueryTypes.SELECT
+            }
+        )
+    }
+
+    static async getCurrentBookings(driver_id){
+        return await Booking.sequelize.query(
+            `SELECT booking.booking_id, booking.from_time, booking.to_time, booking.status, booking.base_fare,
+            booking.total_price as total_fare, booking.payment_id, booking.payment_status, booking.payment_medium,
+            space.address as address, space.city as city, space.rating as rating, booking.is_rated,
+            booking.total_price - booking.base_fare as time_fare
+            FROM booking 
+            INNER JOIN space ON booking.space_id = space.space_id 
+            WHERE booking.driver_id = :driver_id AND (booking.status = 'active' 
+            OR booking.status = 'requested')`,
+            {
+                replacements: {driver_id: driver_id},
+                type: Booking.sequelize.QueryTypes.SELECT
+            }
+        )
     }
 }
