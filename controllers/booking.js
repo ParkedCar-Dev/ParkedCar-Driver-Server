@@ -73,7 +73,7 @@ module.exports = class BookingController {
             if(booking.driver_id != req.user.user_id){
                 return res.json({status: "error", message: "You are not authorized to cancel this booking.", booking: null})
             }
-            if(booking.status != "active" || booking.status != "requested"){
+            if(booking.status != "active" && booking.status != "requested"){
                 return res.json({status: "error", message: "Booking cannot be cancelled.", booking: null})
             }
             booking.status = "cancelled"
